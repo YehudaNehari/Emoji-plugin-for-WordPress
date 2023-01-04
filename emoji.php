@@ -1,0 +1,114 @@
+<?php
+/**
+* Plugin Name: Add-emoji-plugin
+* Description: Add emoji in a post / page wordpress editor.
+* Version: 1.0
+* Author: Yehuda Nehari
+* Author URI: https://www.yehuda-nehari.com/
+**/
+
+
+// Deduplication smilies
+function fa_get_emojis() {
+    $ynmilies = array(
+        "&#128512;",
+        "&#128513;",
+        "&#128514;",
+        "&#128515;",
+        "&#128516;",
+        "&#128517;",
+        "&#128518;",
+        "&#128519;",
+        "&#128520;",
+        "&#128521;",
+        "&#128522;",
+        "&#128523;",
+        "&#128524;",
+        "&#128525;",
+        "&#128526;",
+        "&#128527;",
+        "&#128528;",
+        "&#128529;",
+        "&#128530;",
+        "&#128531;",
+        "&#128532;",
+        "&#128533;",
+        "&#128534;",
+        "&#128535;",
+        "&#128536;",
+        "&#128537;",
+        "&#128538;",
+        "&#128539;",
+        "&#128540;",
+        "&#128541;",
+        "&#128542;",
+        "&#128543;",
+        "&#128544;",
+        "&#128545;",
+        "&#128546;",
+        "&#128547;",
+        "&#128548;",
+        "&#128549;",
+        "&#128550;",
+        "&#128551;",
+    );
+    foreach($ynmilies as $emoji){
+        $emojis .= $emoji;
+    }
+    return $emojis;
+}
+
+// Add shortcuts to article edit page
+add_action('media_buttons_context', 'fa_smilies_custom_button');
+function fa_smilies_custom_button($context) {
+    $context .= '
+    <a id="insert-media-button" style="position:relative" class="button insert-smilies add_smilies" title="Add Emoji" data-editor="content" href="javascript:;">
+        <span class="dashicons dashicons-smiley"></span>
+            Add Emoji
+    </a>
+
+    <div class="smilies-wrap" id="emoji-wrap">' . fa_get_emojis() . '</div>
+
+    <script>
+        jQuery(document).ready(function(){
+            jQuery(document).on("click", ".insert-smilies",function() { 
+                if(jQuery(".smilies-wrap").hasClass("is-active")){
+                    jQuery(".smilies-wrap").removeClass("is-active");
+                }else{
+                    jQuery(".smilies-wrap").addClass("is-active");
+                }});
+
+            jQuery(document).on("click", ".emoji",function() { 
+                send_to_editor(" " + jQuery(this).attr("alt") + " ");
+                jQuery(".smilies-wrap").removeClass("is-active");return false;
+            });
+        });
+    </script>';
+    return $context;
+}
+
+?>
+
+
+<style>
+#emoji-wrap {
+    background:#fff;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.24);
+    padding: 10px;
+    position: absolute;
+    top: 4.2em;
+    width: 400px;
+    display:none
+}
+#emoji-wrap img {
+    height: 24px !important;
+    width: 24px !important;
+    cursor: pointer;
+    margin-bottom: 5px !important;
+    padding: 4px !important;
+}
+.is-active#emoji-wrap {
+    display:block;
+}
+</style>
