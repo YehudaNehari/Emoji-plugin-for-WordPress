@@ -69,27 +69,30 @@ function fa_smilies_custom_button($context) {
             Add Emoji
     </a>
 
-    <div class="smilies-wrap" id="emoji-wrap">' . fa_get_emojis() . '</div>
-
-    <script>
-        jQuery(document).ready(function(){
-            jQuery(document).on("click", ".insert-smilies",function() { 
-                if(jQuery(".smilies-wrap").hasClass("is-active")){
-                    jQuery(".smilies-wrap").removeClass("is-active");
-                }else{
-                    jQuery(".smilies-wrap").addClass("is-active");
-                }});
-
-            jQuery(document).on("click", ".emoji",function() { 
-                send_to_editor(" " + jQuery(this).attr("alt") + " ");
-                jQuery(".smilies-wrap").removeClass("is-active");return false;
-            });
-        });
-    </script>';
+    <div class="smilies-wrap" id="emoji-wrap">' . fa_get_emojis() . '</div>';
     return $context;
 }
 
 ?>
+
+<script>
+window.addEventListener("load", (event) => {
+    jQuery(document).ready(function(){
+        jQuery(document).on("click", ".insert-smilies",function() { 
+            console.log("inserts");
+            jQuery("#emoji-wrap").css("display", "block");
+        });
+
+        jQuery(document).on("click", ".emoji",function() { 
+            if(jQuery(".smilies-wrap").hasClass("ise")){
+            }else{
+                jQuery(".smilies-wrap").addClass("is-active");
+                send_to_editor(" " + jQuery(this).attr("alt") + " ");
+                jQuery("#emoji-wrap").css("display", "none");
+            }});
+    });
+});
+</script>
 
 
 <style>
