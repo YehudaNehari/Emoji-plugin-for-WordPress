@@ -69,7 +69,7 @@ function fa_smilies_custom_button($context) {
             Add Emoji
     </a>
 
-    <div class="smilies-wrap" id="emoji-wrap">' . fa_get_emojis() . '</div>';
+    <div class="smilies-wrap emoji-wrap" id="emoji-wrap">' . fa_get_emojis() . '</div>';
     return $context;
 }
 
@@ -79,16 +79,19 @@ function fa_smilies_custom_button($context) {
 window.addEventListener("load", (event) => {
     jQuery(document).ready(function(){
         jQuery(document).on("click", ".insert-smilies",function() { 
-            console.log("inserts");
-            jQuery("#emoji-wrap").css("display", "block");
+            if (!jQuery(".smilies-wrap").hasClass("is-active")) {
+                jQuery(".smilies-wrap").addClass("is-active");
+            } else {
+                jQuery(".smilies-wrap").removeClass("is-active");
+            }
         });
 
         jQuery(document).on("click", ".emoji",function() { 
             if(jQuery(".smilies-wrap").hasClass("ise")){
             }else{
-                jQuery(".smilies-wrap").addClass("is-active");
+                jQuery(".smilies-wrap").hasClass("ise")
                 send_to_editor(" " + jQuery(this).attr("alt") + " ");
-                jQuery("#emoji-wrap").css("display", "none");
+                jQuery(".smilies-wrap").removeClass("is-active");
             }});
     });
 });
@@ -96,7 +99,7 @@ window.addEventListener("load", (event) => {
 
 
 <style>
-#emoji-wrap {
+.emoji-wrap {
     background:#fff;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.24);
@@ -113,7 +116,7 @@ window.addEventListener("load", (event) => {
     margin-bottom: 5px !important;
     padding: 4px !important;
 }
-.is-active#emoji-wrap {
+.is-active{
     display:block;
 }
 </style>
