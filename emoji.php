@@ -7,8 +7,29 @@
 * Author URI: https://www.yehuda-nehari.com/
 **/
 
-add_filter("use_block_editor_for_post_type", "disable_gutenberg_editor");
-function disable_gutenberg_editor() { return false; }
+
+add_action( 'admin_enqueue_scripts', 'yn_gutenberg_editor_action' );
+function yn_is_gutenberg_editor() {
+    if( function_exists( 'is_gutenberg_page' ) && is_gutenberg_page() ) { 
+        return true;
+    }   
+    
+    $current_screen = get_current_screen();
+    if ( method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor() ) {
+        return true;
+    }
+    return false;
+}
+function yn_gutenberg_editor_action() {
+    if( yn_is_gutenberg_editor() ) { 
+        // your gutenberg editor related CODE here
+    }   
+    else {
+        // this is not gutenberg.
+        classic_editor();
+        // this may not even be an editor, you need to check the screen if you need to check for another editor.
+    }
+}
 
 // Deduplication smilies
 function fa_get_emojis() {
@@ -60,7 +81,8 @@ function fa_get_emojis() {
     return $emojis;
 }
 
-// Add shortcuts to article edit page
+function classic_editor() {
+
 add_action('media_buttons_context', 'fa_smilies_custom_button');
 function fa_smilies_custom_button($context) {
     $context .= '
@@ -120,3 +142,6 @@ window.addEventListener("load", (event) => {
     display:block;
 }
 </style>
+
+<?php
+}
